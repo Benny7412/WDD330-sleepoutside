@@ -15,11 +15,20 @@ export default class ProductDetails {
       .getElementById("addToCart")
       .addEventListener("click", this.addProductToCart.bind(this));
   }
-  addProductToCart() {
-    const cartItems = getLocalStorage("so-cart") || [];
-    cartItems.push(this.product);
-    setLocalStorage("so-cart", cartItems);
+  
+addProductToCart() {
+  const cartItems = getLocalStorage("so-cart") || [];
+
+  // if already  in cart add 1
+  const index = cartItems.findIndex(i => i.Id === this.product.Id);
+  if (index > -1) {
+    cartItems[index].qty = (cartItems[index].qty || 1) + 1;
+  } else {
+    cartItems.push({ ...this.product, qty: 1 });
   }
+
+  setLocalStorage("so-cart", cartItems);
+}
   renderProductDetails() {
     productDetailsTemplate(this.product);
   }
