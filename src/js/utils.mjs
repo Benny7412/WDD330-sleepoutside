@@ -34,3 +34,37 @@ export function renderListWithTemplate(template, parentElement, list, position =
   }
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
+
+export function renderWithTemplate(template, parentElement, data, callback) {
+  const htmlStrings = template(data)
+  const range = document.createRange();
+  const fragment = range.createContextualFragment(htmlStrings);
+
+  parent.replaceChildren(fragment);
+
+  if (clear) {
+    parentElement.innerHTML = "";
+  }
+
+  if (callback) {
+    callback(data);
+  }
+}
+
+export async function loadTemplate(path) {
+  const res = await fetch(path);
+  const template = await res.text();
+  return template;
+}
+
+export async function loadHeaderFooter() {
+  const headerTemplate = await loadTemplate("../partials/header.html");
+  const headerElement = document.querySelector("#main-header");
+
+  renderListWithTemplate(headerTemplate, headerElement);
+
+  const footerTemplate = await loadTemplate("../partials/header.html");
+  const footerElement = document.querySelector("#main-footer");
+
+  renderListWithTemplate(footerTemplate, footerElement);
+}
