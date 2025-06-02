@@ -10,6 +10,7 @@ export default class ProductDetails {
 
   async init() {
     this.product = await this.dataSource.findProductById(this.productId);
+    console.log("product from dataSource:", this.product);
     this.renderProductDetails();
     document
       .getElementById("addToCart")
@@ -35,15 +36,37 @@ addProductToCart() {
 }
 
 function productDetailsTemplate(product) {
-  document.querySelector("h2").textContent = product.Brand.Name;
-  document.querySelector("h3").textContent = product.NameWithoutBrand;
+  if (!product) return;
+
+  const brandName     = product.Brand?.Name ?? "Unknown Brand";
+  const titleNoBrand  = product.NameWithoutBrand ?? "Untitled Product";
+  const imageUrl      = product.Image ?? "/images/placeholder.png";
+  const finalPrice    = product.FinalPrice != null ? `$${product.FinalPrice}` : "Price Unavailable";
+  const colorName     = product.Colors?.[0]?.ColorName ?? "N/A";
+  const description   = product.DescriptionHtmlSimple ?? "";
+
+
+  const h2 = document.querySelector("h2");
+  if (h2) h2.textContent = brandName;
+
+  const h3 = document.querySelector("h3");
+  if (h3) h3.textContent = titleNoBrand;
 
   const productImage = document.getElementById("productImage");
-  productImage.src = product.Image;
-  productImage.alt = product.NameWithoutBrand;
+  if (productImage) {
+    productImage.src = imageUrl;
+    productImage.alt = `${titleNoBrand} by ${brandName}`;
+  }
 
-  document.getElementById("productPrice").textContent = product.FinalPrice;
-  document.getElementById("productColor").textContent = product.Colors[0].ColorName;
-  document.getElementById("productDesc").innerHTML = product.DescriptionHtmlSimple;
-  document.getElementById("addToCart").dataset.id = product.Id;
+  const productPrice = document.getElementById("productPrice");
+  if (productPrice) productPrice.textContent = finalPrice;
+
+  const productColor = document.getElementById("productColor");
+  if (productColor) productColor.textContent = colorName;
+
+  const productDesc = document.getElementById("productDesc");
+  if (productDesc) productDesc.innerHTML = description;
+
+  const addToCart = document.getElementById("addToCart");
+  if (addToCart) addToCart.dataset.id = product.Id;
 }

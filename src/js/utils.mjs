@@ -23,8 +23,10 @@ export function setClick(selector, callback) {
 }
 
 export function getParam(param) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(param);
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const product = urlParams.get(param);
+  return product
 }
 
 export function renderListWithTemplate(template, parentElement, list, position = "afterbegin", clear = false) {
@@ -36,18 +38,13 @@ export function renderListWithTemplate(template, parentElement, list, position =
 }
 
 export function renderWithTemplate(template, parentElement, data, callback) {
-  const htmlStrings = template(data);
-  const range = document.createRange();
-  const fragment = range.createContextualFragment(htmlStrings);
-
-  parentElement.replaceChildren(fragment);
-
+  parentElement.innerHTML = template;
   if (callback) {
     callback(data);
   }
 }
 
-async function loadTemplate(path) {
+export async function loadTemplate(path) {
   const res = await fetch(path);
   const template = await res.text();
   return template;
