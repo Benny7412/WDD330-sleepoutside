@@ -4,11 +4,11 @@ import { loadHeaderFooter, getParam } from "./utils.mjs";
 
 loadHeaderFooter();
 
-const category = getParam('category');
+const category = getParam("category");
 const dataSource = new ProductData();
-const listElement = document.querySelector('.product-list');
+const listElement = document.querySelector(".product-list");
 const myList = new ProductList(category, dataSource, listElement);
-const topProduct = document.querySelector('.highlight')
+const topProduct = document.querySelector(".highlight")
 
 // It's surprisingly difficult to set the first character of a string to uppercase in javascript??
 if (category && category.length > 0) {
