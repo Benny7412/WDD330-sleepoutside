@@ -4,11 +4,12 @@ function renderCartContents() {
   const cartItems = getLocalStorage("so-cart") || [];
   const htmlItems = cartItems.map(cartItemTemplate);
   document.querySelector(".product-list").innerHTML = htmlItems.join("");
-  attachQtyHandlers();
+  attachCartHandlers();
 }
 
 function cartItemTemplate(item) {
   const newItem = `<li class="cart-card divider" data-id="${item.Id}">
+  <button class="remove-item" data-id="${item.Id}" aria-label="remove item" >×</button>
   <a href="#" class="cart-card__image">
     <img src="${item.Image}" alt="${item.Name}"/>
   </a>
@@ -16,11 +17,13 @@ function cartItemTemplate(item) {
     <h2 class="card__name">${item.Name}</h2>
   </a>
   <p class="cart-card__color">${item.Colors[0].ColorName}</p>
+  <div class="divider>
   <p class="cart-card__quantity">
     <button class="qty-minus" aria-label="decrease quantity">-</button>
     <input type="number" class="qty-input" min="1" value="${item.qty}">
     <button class="qty-plus" aria-label="increase quantity">+</button>
   </p>
+  </div>
 
   <p class="cart-card__price">$${(item.FinalPrice * item.qty).toFixed(2)}</p>
 </li>`;
@@ -29,7 +32,8 @@ function cartItemTemplate(item) {
 }
 
 renderCartContents();
-function attachQtyHandlers() {
+
+function attachCartHandlers() {
   document.querySelectorAll(".qty-plus").forEach(btn =>
     btn.addEventListener("click", () => changeQty(btn, +1))
   );
@@ -40,6 +44,10 @@ function attachQtyHandlers() {
 
   document.querySelectorAll(".qty-input").forEach(inp =>
     inp.addEventListener("change", () => setQtyFromInput(inp))
+  );
+
+  document.querySelectorAll(".remove-item").forEach(btn =>
+    btn.addEventListener("click", () => removeItem(btn.dataset.id))
   );
 }
 
@@ -61,6 +69,13 @@ function updateQty(id, newQtyFn) {
   const item = cart.find(p => p.Id === id);
   if (!item) return;
   item.qty = newQtyFn(item.qty || 1);
+  setLocalStorage("so-cart", cart);
+  renderCartContents();
+}
+
+function removeItem(id) {
+  let cart = getLocalStorage("so-cart") || [];
+  cart = cart.filter(item => item.Id !== id);
   setLocalStorage("so-cart", cart);
   renderCartContents();
 }
