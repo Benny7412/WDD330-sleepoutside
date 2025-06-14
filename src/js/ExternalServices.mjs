@@ -1,4 +1,4 @@
-const baseURL = "http://wdd330-backend.onrender.com/";
+const baseURL = "https://wdd330-backend.onrender.com/";
 
 async function convertToJson(res) {
   const data = await res.json();
