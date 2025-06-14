@@ -1,11 +1,13 @@
-const baseURL = "http://server-nodejs.cit.byui.edu:3000/";
+const baseURL = "http://wdd330-backend.onrender.com/";
+
 async function convertToJson(res) {
   const data = await res.json();
-  if (res.ok) {
-    return data;
-  } else {
-    throw { name: "servicesError", message: data };
+  
+  if (!data.ok) {
+   throw { name: "servicesError", message: data }; 
   }
+  
+  return data;
 }
 
 export default class ExternalServices {

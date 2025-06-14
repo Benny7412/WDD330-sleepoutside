@@ -1,5 +1,4 @@
-import { setLocalStorage, getLocalStorage } from "./utils.mjs";
-import { alertMessage, removeAllAlerts } from "./utils.mjs";
+import { setLocalStorage, getLocalStorage, alertMessage, removeAllAlerts } from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 
 const services = new ExternalServices();
@@ -52,7 +51,7 @@ export default class CheckoutProcess {
     }
 
     calculateOrderTotal() {
-        this.shipping = (10 + (this.list.length - 1) * 2).toFixed(2);
+        this.shipping = 10 + (this.list.length - 1) * 2;
         this.tax = (this.itemTotal * 0.06).toFixed(2);
         this.orderTotal = (
             parseFloat(this.itemTotal) +
@@ -71,7 +70,7 @@ export default class CheckoutProcess {
         taxElement.innerText = "$" + this.tax;
         orderTotalElement = "$" + this.orderTotal;
     }
-    async checkout(form) {
+    async checkout() {
         const formElement = document.forms["checkout"];
         let json = formDataToJSON(formElement);
         json.orderDate = new Date();
@@ -82,14 +81,14 @@ export default class CheckoutProcess {
         console.log(json)
 
         try {
-        const res = await services.checkout(json);
-        console.log(res);
-        location.assign("/checkout/success.html")
-        console.log("sent to succes")
-    } catch(err) {
-        removeAllAlerts();
-        for(let message in err.message) {
-            alertMessage(err.message);
+            const res = await services.checkout(json);
+            console.log(res);
+            location.assign("/checkout/success.html")
+            console.log("sent to succes")
+        } catch(err) {
+            removeAllAlerts();
+            for(let message in err.message) {
+                alertMessage(err.message);
         }
     }
     }
