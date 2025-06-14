@@ -1,6 +1,8 @@
 import { setLocalStorage, getLocalStorage } from "./utils.mjs";
 import { alertMessage, removeAllAlerts } from "./utils.mjs";
+import ExternalServices from "./ExternalServices.mjs";
 
+const services = new ExternalServices();
 function formDataToJSON(formElement) {
   const formData = new FormData(formElement),
     convertedJSON = {};
@@ -71,18 +73,19 @@ export default class CheckoutProcess {
     }
     async checkout(form) {
         const formElement = document.forms["checkout"];
-        const json = formDataToJSON(formElement);
-
+        let json = formDataToJSON(formElement);
         json.orderDate = new Date();
         json.orderTotal = this.orderTotal;
         json.tax = this.tax;
         json.shipping = this.shipping;
         json.items = packageItems(this.list);
         console.log(json)
+
         try {
         const res = await services.checkout(json);
         console.log(res);
         location.assign("/checkout/success.html")
+        console.log("sent to succes")
     } catch(err) {
         removeAllAlerts();
         for(let message in err.message) {
