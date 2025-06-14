@@ -9,7 +9,7 @@ function formDataToJSON(formElement) {
   formData.forEach(function (value, key) {
     convertedJSON[key] = value;
   });
-
+  console.log("converted json " + convertedJSON)
   return convertedJSON;
 }
 
@@ -23,6 +23,7 @@ function packageItems(items) {
             quantity: 1,
          };
     });
+    console.log("compressed items " + compressedItems)
     return compressedItems;
 }
 
