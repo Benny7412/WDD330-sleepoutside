@@ -1,9 +1,18 @@
 import { getLocalStorage, setLocalStorage } from "./utils.mjs";
 
 function renderCartContents() {
+  //get
   const cartItems = getLocalStorage("so-cart") || [];
+  //build
   const htmlItems = cartItems.map(cartItemTemplate);
   document.querySelector(".product-list").innerHTML = htmlItems.join("");
+
+  //calc
+  const total = cartItems.reduce(
+    (sum, item) => sum + item.FinalPrice * (item.qty || 1), 0);
+    
+  document.querySelector("#cart-total").textContent = `$${total.toFixed(2)}`;
+
   attachCartHandlers();
 }
 
