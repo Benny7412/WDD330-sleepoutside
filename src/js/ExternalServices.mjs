@@ -2,12 +2,11 @@ const baseURL = "https://wdd330-backend.onrender.com/";
 
 async function convertToJson(res) {
   const data = await res.json();
-  
-  if (!data.ok) {
-   throw { name: "servicesError", message: data }; 
+  if (res.ok) {
+    return data;
+  } else {
+    throw { name: "servicesError", message: data };
   }
-  
-  return data;
 }
 
 export default class ExternalServices {

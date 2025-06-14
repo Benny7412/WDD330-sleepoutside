@@ -2,6 +2,7 @@ import { setLocalStorage, getLocalStorage, alertMessage, removeAllAlerts } from 
 import ExternalServices from "./ExternalServices.mjs";
 
 const services = new ExternalServices();
+
 function formDataToJSON(formElement) {
   const formData = new FormData(formElement),
     convertedJSON = {};
@@ -9,7 +10,7 @@ function formDataToJSON(formElement) {
   formData.forEach(function (value, key) {
     convertedJSON[key] = value;
   });
-  console.log("converted json " + convertedJSON)
+
   return convertedJSON;
 }
 
